@@ -1,93 +1,158 @@
-    /* Defining a technical color palette */
-    --bg-main: #0a0e14;
-    --bg-surface: #111827;
-    --accent: #00ff9d; /* Neon terminal green */
-    --text-primary: #e2e8f0;
-    --text-muted: #94a3b8;
-    --border-style: 1px solid #1e293b;
+/* --- SYSTEM VARIABLES --- */
+:root {
+    --bg-dark: #010409;        /* GitHub-style dark */
+    --bg-surface: #0d1117;     /* GitHub-style surface */
+    --accent: #39d353;         /* GitHub contribution green */
+    --accent-glitch: #ff003c;  /* Glitch highlight color */
+    --border-color: #30363d;
+    --text-main: #e6edf3;
+    --text-muted: #8b949e;
+    --font-mono: 'ui-monospace', 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', monospace;
 }
 
 body {
     margin: 0;
-    /* Swapping to a Monospace font for that 'code' feel */
-    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-    background-color: var(--bg-main);
-    color: var(--text-primary);
-    line-height: 1.6;
+    font-family: var(--font-mono);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.5;
 }
 
+/* --- GLITCH ANIMATION DEFINITION --- */
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+/* --- HEADER & NAVIGATION --- */
 header {
     background-color: var(--bg-surface);
     padding: 1rem 2rem;
-    border-bottom: var(--border-style);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-nav a {
+header::before {
+    content: "MASTER // BRANCH";
+    font-size: 0.7rem;
     color: var(--accent);
-    margin-right: 20px;
+    letter-spacing: 1.5px;
+}
+
+nav a {
+    color: var(--text-main);
+    margin-left: 20px;
     text-decoration: none;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.8rem;
+    position: relative;
 }
 
 nav a:hover {
-    text-shadow: 0 0 8px var(--accent);
+    color: var(--accent);
+    animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+    text-shadow: 0.05em 0 0 var(--accent-glitch), -0.05em -0.025em 0 cyan;
 }
 
+/* --- LAYOUT & SCANLINE --- */
 .container {
     display: flex;
-    /* Grid background effect often seen in technical blueprints */
-    background-image: radial-gradient(#1e293b 0.5px, transparent 0.5px);
-    background-size: 20px 20px;
+    position: relative;
+    min-height: 100vh;
+    background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+    background-size: 50px 50px; /* Subtle grid */
+    background-color: var(--bg-dark);
 }
 
 .sidebar {
-    width: 260px;
+    width: 240px;
     background: var(--bg-surface);
-    padding: 2rem 1rem;
-    min-height: 100vh;
-    border-right: var(--border-style);
+    padding: 2rem 0;
+    border-right: 1px solid var(--border-color);
+    z-index: 2;
 }
 
 .sidebar a {
     display: block;
     color: var(--text-muted);
-    padding: 8px 12px;
-    margin-bottom: 4px;
+    padding: 12px 25px;
     text-decoration: none;
-    border-left: 2px solid transparent;
-    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
 }
 
 .sidebar a:hover {
-    color: var(--accent);
-    background: rgba(0, 255, 157, 0.05);
-    border-left: 2px solid var(--accent);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--accent);
 }
 
+/* --- CONTENT & WINDOWS --- */
 .content {
     flex: 1;
-    padding: 3rem;
-    max-width: 1000px;
+    padding: 40px;
+    max-width: 1100px;
+    z-index: 1;
 }
 
-h1, h2, h3 {
-    color: #ffffff;
-    font-weight: 700;
-    /* Adding a cursor-like blink to the main heading */
-    border-left: 4px solid var(--accent);
-    padding-left: 15px;
+section {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-footer {
-    text-align: center;
-    padding: 1.5rem;
-    background-color: var(--bg-surface);
-    border-top: var(--border-style);
+/* Window "Dots" with a technical twist */
+section::before {
+    content: "SRC_CONTROLS [x][+][-]";
+    display: block;
+    font-size: 0.65rem;
     color: var(--text-muted);
-    font-size: 0.75rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3 {
+    color: #fff;
+    margin-top: 0;
+    display: inline-block;
+}
+
+h1:hover {
+    animation: glitch 0.4s linear infinite;
+    text-shadow: 2px 0 var(--accent-glitch), -2px 0 cyan;
+}
+
+h1::after {
+    content: "_";
+    color: var(--accent);
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* --- TERMINAL FOOTER --- */
+footer {
+    text-align: left;
+    padding: 15px 30px;
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: #000;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+}
+
+footer::before {
+    content: "> SYSTEM STATUS: STABLE // ENCRYPTION: ACTIVE // ";
 }
