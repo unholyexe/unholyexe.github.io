@@ -1,14 +1,12 @@
-/* -------------------------- */
 /* General Body */
 body {
     margin: 0;
-    font-family: "Fira Code", "Courier New", monospace; /* Technical font */
-    background-color: #0a0f1a; /* Darker terminal feel */
-    color: #e0e6f0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #0f172a; /* Dark technical background */
+    color: #e2e8f0;
     line-height: 1.6;
 }
 
-/* -------------------------- */
 /* Header */
 header {
     background-color: #111827;
@@ -16,17 +14,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-    border-bottom: 1px solid #334155;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
 header h1 {
     font-family: "Courier New", monospace;
     font-weight: bold;
-    letter-spacing: 2px;
-    color: #00ffff; /* Neon cyan for a techy feel */
+    letter-spacing: 1px;
+    color: #38bdf8;
     margin: 0;
-    text-shadow: 0 0 5px rgba(0,255,255,0.5);
 }
 
 /* Navigation Links */
@@ -34,44 +30,36 @@ nav a {
     color: #38bdf8;
     margin-left: 20px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 500;
     transition: all 0.2s ease-in-out;
-    padding: 4px 6px;
-    border-radius: 4px;
 }
 
 nav a:hover {
-    background-color: #0ea5e9;
-    color: #0f172a;
-    text-decoration: none;
-    box-shadow: 0 0 5px rgba(14,165,233,0.7);
+    text-decoration: underline;
+    color: #0ea5e9;
 }
 
-/* -------------------------- */
 /* Container for Sidebar + Content */
 .container {
     display: flex;
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px); /* Account for header/footer */
 }
 
-/* -------------------------- */
 /* Sidebar */
 .sidebar {
-    width: 260px;
-    background: #1e293b;
+    width: 250px;
+    background: #1e293b; /* slightly lighter than header */
     padding: 20px;
     min-height: 100vh;
     border-right: 1px solid #334155;
     position: sticky;
     top: 0;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.5);
 }
 
 .sidebar h3 {
-    color: #00ffff;
+    color: #38bdf8;
     font-family: "Courier New", monospace;
-    margin-top: 25px;
-    text-shadow: 0 0 4px rgba(0,255,255,0.5);
+    margin-top: 20px;
 }
 
 .sidebar a {
@@ -79,20 +67,16 @@ nav a:hover {
     color: #cbd5e1;
     margin-bottom: 10px;
     text-decoration: none;
-    padding: 6px 8px;
+    padding: 4px 6px;
     border-radius: 4px;
-    transition: all 0.2s ease-in-out;
-    font-family: "Courier New", monospace;
-    font-size: 0.95em;
+    transition: background 0.2s, color 0.2s;
 }
 
 .sidebar a:hover {
-    background-color: #00ffff;
-    color: #0a0f1a;
-    box-shadow: 0 0 8px rgba(0,255,255,0.5);
+    background-color: #0ea5e9;
+    color: #0f172a;
 }
 
-/* -------------------------- */
 /* Main Content */
 .content {
     flex: 1;
@@ -100,22 +84,14 @@ nav a:hover {
     max-width: 1000px;
 }
 
-/* Sections */
 section {
     margin-bottom: 40px;
-    background-color: #111827;
-    padding: 25px 30px;
-    border-left: 4px solid #00ffff;
-    border-radius: 6px;
-    box-shadow: 0 0 15px rgba(0,255,255,0.05);
 }
 
-/* -------------------------- */
 /* Headings */
 h1, h2, h3 {
-    color: #00ffff;
+    color: #ffffff;
     font-family: "Courier New", monospace;
-    text-shadow: 0 0 2px rgba(0,255,255,0.5);
 }
 
 h2 {
@@ -128,26 +104,20 @@ h3 {
     margin-top: 20px;
 }
 
-/* -------------------------- */
 /* Code & Preformatted Text */
 code, pre {
-    background-color: #0f172a;
+    background-color: #1e293b;
     color: #facc15;
-    padding: 4px 6px;
+    padding: 2px 4px;
     border-radius: 4px;
-    font-family: "Fira Code", monospace;
-    font-size: 0.95em;
-    display: block;
+    font-family: "Courier New", monospace;
 }
 
 pre {
-    padding: 15px;
+    padding: 10px;
     overflow-x: auto;
-    border-left: 4px solid #facc15;
-    box-shadow: inset 0 0 10px rgba(250,202,21,0.1);
 }
 
-/* -------------------------- */
 /* Footer */
 footer {
     text-align: center;
@@ -159,7 +129,6 @@ footer {
     color: #94a3b8;
 }
 
-/* -------------------------- */
 /* Lists */
 ul, ol {
     padding-left: 20px;
@@ -169,72 +138,13 @@ ul li, ol li {
     margin-bottom: 8px;
 }
 
-/* -------------------------- */
-/* Links in Content */
+/* Links in content */
 a {
     color: #38bdf8;
     text-decoration: none;
-    font-weight: 500;
 }
 
 a:hover {
     color: #0ea5e9;
     text-decoration: underline;
-}
-
-/* -------------------------- */
-/* Responsive */
-@media screen and (max-width: 1024px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        min-height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid #334155;
-    }
-
-    .content {
-        padding: 20px;
-    }
-
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    nav {
-        margin-top: 10px;
-    }
-
-    nav a {
-        margin-left: 0;
-        margin-right: 15px;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    header h1 {
-        font-size: 1.5em;
-    }
-
-    .sidebar h3 {
-        font-size: 1em;
-    }
-
-    .sidebar a {
-        padding: 6px 4px;
-        font-size: 0.9em;
-    }
-
-    .content {
-        padding: 15px;
-    }
-
-    section {
-        margin-bottom: 25px;
-    }
 }
