@@ -57,8 +57,10 @@
                         
                         <input type="text" name="_gotcha" style="display:none">
                         
+                        <div id="terminal-logs" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 15px; min-height: 60px; font-family: var(--font-mono);"></div>
+
                         <div style="margin-top: 20px;">
-                            <button type="submit" class="btn-send">[ TRANSMIT_DATA ]</button>
+                            <button type="submit" class="btn-send" id="submit-btn">[ TRANSMIT_DATA ]</button>
                         </div>
                     </form>
                 </div>
@@ -93,55 +95,83 @@
 <script>
     const contactForm = document.getElementById('contact-form');
     const modal = document.getElementById('thanksModal');
+    const logContainer = document.getElementById('terminal-logs');
 
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
-            const btn = this.querySelector('.btn-send');
+            const btn = document.getElementById('submit-btn');
             const originalText = btn.innerText;
-            btn.innerText = "[ SENDING... ]";
-            btn.disabled = true; 
             
-            // Collect data and convert to JSON for better compatibility
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+            // UI LOCKDOWN
+            btn.disabled = true;
+            btn.innerText = "[ PROCESSING... ]";
+            logContainer.innerHTML = ""; // Reset logs
 
-            fetch('https://formspree.io/f/mjgepkeo', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: { 
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    // Show modal and trigger the CSS flicker animation
-                    modal.style.display = 'flex'; 
-                    modal.querySelector('.modal-content').classList.add('modal-glitch-effect');
-                    contactForm.reset(); 
+            // FAKE SECURITY LOGS
+            const logs = [
+                "> INITIALIZING_SECURE_UPLINK...",
+                "> SCRUBBING_SENDER_METADATA...",
+                "> ENCRYPTING_PACKETS_AES256...",
+                "> BYPASSING_PROXY_FILTERS...",
+                "> HANDSHAKE_CONFIRMED. SENDING..."
+            ];
+
+            let i = 0;
+            const logInterval = setInterval(() => {
+                if (i < logs.length) {
+                    const line = document.createElement('div');
+                    line.style.marginBottom = "2px";
+                    line.innerText = logs[i];
+                    // Make the logs green using your accent color
+                    line.style.color = "var(--accent)"; 
+                    logContainer.appendChild(line);
+                    i++;
                 } else {
-                    // Try to parse error message from Formspree
-                    response.json().then(errorData => {
-                        console.error('Formspree Error:', errorData);
-                        alert('TRANSMISSION_FAILED: ' + (errorData.error || 'Check Verification Status.'));
-                    });
+                    clearInterval(logInterval);
+                    performTransmission();
                 }
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }).catch(error => {
-                console.error('Network Error:', error);
-                alert('NETWORK_ERROR: Connection to terminal hub lost.');
-                btn.innerText = originalText;
-                btn.disabled = false;
-            });
+            }, 350);
+
+            function performTransmission() {
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+
+                fetch('https://formspree.io/f/mjgepkeo', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: { 
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        modal.style.display = 'flex'; 
+                        modal.querySelector('.modal-content').classList.add('modal-glitch-effect');
+                        contactForm.reset(); 
+                        logContainer.innerHTML = ""; // Clear logs on success
+                    } else {
+                        response.json().then(errorData => {
+                            console.error('Formspree Error:', errorData);
+                            alert('TRANSMISSION_FAILED: ' + (errorData.error || 'Check Verification Status.'));
+                        });
+                    }
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }).catch(error => {
+                    console.error('Network Error:', error);
+                    alert('NETWORK_ERROR: Connection to terminal hub lost.');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+            }
         });
     }
 
     function closeModal() {
         modal.style.display = 'none';
-        // Remove glitch class so it can re-animate next time
         modal.querySelector('.modal-content').classList.remove('modal-glitch-effect');
     }
 
