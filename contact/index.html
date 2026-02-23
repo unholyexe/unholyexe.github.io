@@ -73,5 +73,21 @@
 
 <script src="../js/search.js"></script>
 
+<div id="thanksModal" class="modal-overlay">
+    <div class="modal-content section"> <div class="terminal-header">
+            <span class="terminal-title">System_Message // SUCCESS</span>
+            <button onclick="closeModal()" class="modal-close-btn">×</button>
+        </div>
+        <div class="terminal-body">
+            <p class="accent">> TRANSMISSION_COMPLETE...</p>
+            <p>Data packets successfully relayed to master branch.</p>
+            <p class="text-muted">I will review the logs and get back to you shortly.</p>
+            <div style="margin-top: 20px;">
+                <button onclick="closeModal()" class="btn-send">[ ACKNOWLEDGE ]</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
