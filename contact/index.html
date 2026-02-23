@@ -96,46 +96,55 @@
 
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
-            // STOP ALL DEFAULT BROWSER ACTIONS
             e.preventDefault();
             e.stopPropagation();
             
             const btn = this.querySelector('.btn-send');
             const originalText = btn.innerText;
             btn.innerText = "[ SENDING... ]";
-            btn.disabled = true; // Prevent double-clicks
+            btn.disabled = true; 
             
+            // Collect data and convert to JSON for better compatibility
             const formData = new FormData(this);
-            
-            // TRANSMIT DATA VIA AJAX
+            const data = Object.fromEntries(formData.entries());
+
             fetch('https://formspree.io/f/mjgepkeo', {
                 method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
+                body: JSON.stringify(data),
+                headers: { 
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
             }).then(response => {
                 if (response.ok) {
-                    modal.style.display = 'flex'; // Show our custom modal
-                    contactForm.reset(); // Clear form fields
+                    // Show modal and trigger the CSS flicker animation
+                    modal.style.display = 'flex'; 
+                    modal.querySelector('.modal-content').classList.add('modal-glitch-effect');
+                    contactForm.reset(); 
                 } else {
-                    alert('Transmission failed. Ensure your Formspree ID is verified.');
+                    // Try to parse error message from Formspree
+                    response.json().then(errorData => {
+                        console.error('Formspree Error:', errorData);
+                        alert('TRANSMISSION_FAILED: ' + (errorData.error || 'Check Verification Status.'));
+                    });
                 }
                 btn.innerText = originalText;
                 btn.disabled = false;
             }).catch(error => {
-                console.error('Error:', error);
-                alert('Network Error. Connection timed out.');
+                console.error('Network Error:', error);
+                alert('NETWORK_ERROR: Connection to terminal hub lost.');
                 btn.innerText = originalText;
                 btn.disabled = false;
             });
         });
     }
 
-    // Function to hide modal
     function closeModal() {
         modal.style.display = 'none';
+        // Remove glitch class so it can re-animate next time
+        modal.querySelector('.modal-content').classList.remove('modal-glitch-effect');
     }
 
-    // Close modal if user clicks outside the box
     window.onclick = function(event) {
         if (event.target == modal) {
             closeModal();
