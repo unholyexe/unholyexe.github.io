@@ -4,15 +4,17 @@
     --bg-surface: #0d1117;     /* GitHub-style surface */
     --accent: #39d353;         /* GitHub contribution green */
     --accent-glitch: #ff003c;  /* Glitch highlight color */
-    --warning-orange: #d29922; /* Low-level alerts */
-    --info-blue: #58a6ff;      /* System info/Code color */
     --border-color: #30363d;
     --text-main: #e6edf3;
     --text-muted: #8b949e;
     --font-mono: 'ui-monospace', 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', monospace;
+    
+    /* NEW INTEGRATED VARIABLES */
+    --warning-orange: #d29922; 
+    --info-blue: #58a6ff;     
+    --bg-code: #161b22;       
 }
 
-/* --- BASE STYLES & SCANLINE --- */
 body {
     margin: 0;
     font-family: var(--font-mono);
@@ -21,7 +23,7 @@ body {
     line-height: 1.5;
 }
 
-/* Subtle scanline overlay for the "CRT" aesthetic */
+/* NEW: SCANLINE OVERLAY */
 body::before {
     content: " ";
     display: block;
@@ -35,7 +37,7 @@ body::before {
     opacity: 0.3;
 }
 
-/* --- ANIMATIONS --- */
+/* --- GLITCH ANIMATION DEFINITION --- */
 @keyframes glitch {
     0% { transform: translate(0); }
     20% { transform: translate(-2px, 2px); }
@@ -46,6 +48,18 @@ body::before {
 }
 
 @keyframes blink { 50% { opacity: 0; } }
+
+/* --- GLOBAL HYPERLINK STYLES --- */
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #fff;
+    text-shadow: 0.05em 0 0 var(--accent-glitch), -0.05em -0.025em 0 cyan;
+}
 
 /* --- HEADER & NAVIGATION --- */
 header {
@@ -68,18 +82,55 @@ nav a {
     color: var(--text-main);
     margin-left: 20px;
     font-size: 0.8rem;
-    text-decoration: none;
+    position: relative;
     text-transform: uppercase;
-    transition: all 0.2s;
 }
 
 nav a:hover {
-    color: var(--accent);
     animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
-    text-shadow: 0.05em 0 0 var(--accent-glitch), -0.05em -0.025em 0 cyan;
 }
 
-/* --- SECTION & CONTENT --- */
+/* --- LAYOUT & SCANLINE --- */
+.container {
+    display: flex;
+    position: relative;
+    min-height: 100vh;
+    background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-color: var(--bg-dark);
+}
+
+.sidebar {
+    width: 240px;
+    background: var(--bg-surface);
+    padding: 2rem 0;
+    border-right: 1px solid var(--border-color);
+    z-index: 2;
+}
+
+.sidebar a {
+    display: block;
+    color: var(--text-muted);
+    padding: 12px 25px;
+    font-size: 0.85rem;
+    border-left: 3px solid transparent;
+}
+
+.sidebar a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--accent);
+}
+
+/* --- CONTENT & WINDOWS --- */
+.content {
+    flex: 1;
+    padding: 40px;
+    max-width: 1100px;
+    z-index: 1;
+}
+
 section {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
@@ -87,7 +138,6 @@ section {
     padding: 30px;
     margin-bottom: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    position: relative;
 }
 
 section::before {
@@ -100,42 +150,21 @@ section::before {
     padding-bottom: 10px;
 }
 
-/* --- TECHNICAL COMPONENTS --- */
-
-/* Code Blocks for Engineering Docs */
-code {
-    font-family: var(--font-mono);
-    background-color: #161b22;
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-    color: var(--info-blue);
-    border: 1px solid var(--border-color);
+/* --- TYPOGRAPHY & TITLES --- */
+h1, h2, h3 {
+    color: #fff;
+    margin-top: 0;
 }
 
-pre {
-    background-color: #161b22;
-    padding: 1.5rem;
-    overflow-x: auto;
-    border-left: 3px solid var(--accent);
-    border-radius: 4px;
-}
-
-/* Engineering Badges */
-.badge {
-    font-size: 0.65rem;
-    padding: 2px 6px;
-    border: 1px solid;
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-right: 5px;
+h1 {
     display: inline-block;
+    cursor: default;
 }
-.badge-secure { color: var(--accent); border-color: var(--accent); }
-.badge-critical { color: var(--accent-glitch); border-color: var(--accent-glitch); }
-.badge-info { color: var(--info-blue); border-color: var(--info-blue); }
 
-/* --- TYPOGRAPHY --- */
-h1, h2, h3 { color: #fff; margin-top: 0; }
+h1:hover {
+    animation: glitch 0.4s linear infinite;
+    text-shadow: 2px 0 var(--accent-glitch), -2px 0 cyan;
+}
 
 h1::after {
     content: "_";
@@ -143,7 +172,126 @@ h1::after {
     animation: blink 1s step-end infinite;
 }
 
-/* --- FOOTER --- */
+/* --- SPECIAL LINKS WITHIN CONTENT --- */
+section ul li a::before {
+    content: "> ";
+    color: var(--accent);
+    font-weight: bold;
+}
+
+section p a {
+    border-bottom: 1px solid var(--accent);
+}
+
+section p a:hover {
+    border-bottom-color: var(--accent-glitch);
+}
+
+/* --- NEW TECHNICAL COMPONENTS --- */
+code, pre {
+    font-family: var(--font-mono);
+    background-color: var(--bg-code);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    color: var(--info-blue);
+    border: 1px solid var(--border-color);
+}
+
+pre {
+    padding: 1.5rem;
+    overflow-x: auto;
+    border-left: 3px solid var(--accent);
+}
+
+.badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border: 1px solid;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-right: 5px;
+    border-radius: 2px;
+    display: inline-block;
+}
+.badge-secure { color: var(--accent); border-color: var(--accent); }
+.badge-warning { color: var(--warning-orange); border-color: var(--warning-orange); }
+.badge-critical { color: var(--accent-glitch); border-color: var(--accent-glitch); }
+
+/* --- NEW SECURE TERMINAL CONTACT SECTION --- */
+.terminal-contact {
+    border: 1px solid var(--border-color);
+    background: #000;
+    padding: 0 !important; /* Override standard section padding */
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.terminal-header {
+    background: var(--bg-surface);
+    padding: 8px 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-title {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.terminal-body {
+    padding: 20px;
+    font-size: 0.9rem;
+}
+
+.msg-line {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.msg-prompt {
+    color: var(--accent);
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.msg-input {
+    background: transparent;
+    border: none;
+    color: var(--info-blue);
+    font-family: var(--font-mono);
+    outline: none;
+    flex-grow: 1;
+    border-bottom: 1px solid transparent;
+}
+
+.msg-input:focus {
+    border-bottom: 1px solid var(--accent-glitch);
+}
+
+.btn-send {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 5px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.btn-send:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* --- TERMINAL FOOTER --- */
 footer {
     text-align: left;
     padding: 15px 30px;
