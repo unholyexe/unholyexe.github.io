@@ -28,6 +28,20 @@ body {
     100% { transform: translate(0); }
 }
 
+@keyframes blink { 50% { opacity: 0; } }
+
+/* --- GLOBAL HYPERLINK STYLES --- */
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #fff;
+    text-shadow: 0.05em 0 0 var(--accent-glitch), -0.05em -0.025em 0 cyan;
+}
+
 /* --- HEADER & NAVIGATION --- */
 header {
     background-color: var(--bg-surface);
@@ -48,15 +62,13 @@ header::before {
 nav a {
     color: var(--text-main);
     margin-left: 20px;
-    text-decoration: none;
     font-size: 0.8rem;
     position: relative;
+    text-transform: uppercase;
 }
 
 nav a:hover {
-    color: var(--accent);
     animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
-    text-shadow: 0.05em 0 0 var(--accent-glitch), -0.05em -0.025em 0 cyan;
 }
 
 /* --- LAYOUT & SCANLINE --- */
@@ -66,7 +78,7 @@ nav a:hover {
     min-height: 100vh;
     background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
                       linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-    background-size: 50px 50px; /* Subtle grid */
+    background-size: 50px 50px;
     background-color: var(--bg-dark);
 }
 
@@ -82,10 +94,8 @@ nav a:hover {
     display: block;
     color: var(--text-muted);
     padding: 12px 25px;
-    text-decoration: none;
     font-size: 0.85rem;
     border-left: 3px solid transparent;
-    transition: all 0.2s;
 }
 
 .sidebar a:hover {
@@ -111,7 +121,6 @@ section {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* Window "Dots" with a technical twist */
 section::before {
     content: "SRC_CONTROLS [x][+][-]";
     display: block;
@@ -122,11 +131,15 @@ section::before {
     padding-bottom: 10px;
 }
 
-/* --- TYPOGRAPHY --- */
+/* --- TYPOGRAPHY & TITLES --- */
 h1, h2, h3 {
     color: #fff;
     margin-top: 0;
+}
+
+h1 {
     display: inline-block;
+    cursor: default;
 }
 
 h1:hover {
@@ -140,7 +153,20 @@ h1::after {
     animation: blink 1s step-end infinite;
 }
 
-@keyframes blink { 50% { opacity: 0; } }
+/* --- SPECIAL LINKS WITHIN CONTENT --- */
+section ul li a::before {
+    content: "> ";
+    color: var(--accent);
+    font-weight: bold;
+}
+
+section p a {
+    border-bottom: 1px solid var(--accent);
+}
+
+section p a:hover {
+    border-bottom-color: var(--accent-glitch);
+}
 
 /* --- TERMINAL FOOTER --- */
 footer {
@@ -150,7 +176,6 @@ footer {
     color: var(--accent);
     background: #000;
     border-top: 1px solid var(--border-color);
-    font-family: var(--font-mono);
 }
 
 footer::before {
