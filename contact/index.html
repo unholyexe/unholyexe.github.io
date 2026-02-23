@@ -35,7 +35,7 @@
                         <span class="text-muted">Initiating contact protocol...</span>
                     </div>
                     
-                    <form action="https://formspree.io/f/mjgepkeo" method="POST">
+                    <form id="contact-form" action="https://formspree.io/f/mjgepkeo" method="POST">
                         <div class="msg-line">
                             <span class="msg-prompt">IDENTITY:</span>
                             <input type="text" name="name" class="msg-input" placeholder="Name/Alias" required>
@@ -71,10 +71,9 @@
     <p>© 2026 Unholy ⥀</p>
 </footer>
 
-<script src="../js/search.js"></script>
-
 <div id="thanksModal" class="modal-overlay">
-    <div class="modal-content section"> <div class="terminal-header">
+    <div class="modal-content section"> 
+        <div class="terminal-header">
             <span class="terminal-title">System_Message // SUCCESS</span>
             <button onclick="closeModal()" class="modal-close-btn">×</button>
         </div>
@@ -88,6 +87,43 @@
         </div>
     </div>
 </div>
+
+<script src="../js/search.js"></script>
+
+<script>
+    const contactForm = document.getElementById('contact-form');
+    const modal = document.getElementById('thanksModal');
+
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents Formspree from opening a new window
+        
+        const btn = this.querySelector('.btn-send');
+        btn.innerText = "[ SENDING... ]";
+        
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                modal.style.display = 'flex'; // Opens your popup
+                contactForm.reset(); // Clears the form
+            } else {
+                alert('Transmission failed. Ensure your Formspree ID is active.');
+            }
+            btn.innerText = "[ TRANSMIT_DATA ]";
+        }).catch(error => {
+            alert('Network Error. Connection timed out.');
+            btn.innerText = "[ TRANSMIT_DATA ]";
+        });
+    });
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+</script>
 
 </body>
 </html>
