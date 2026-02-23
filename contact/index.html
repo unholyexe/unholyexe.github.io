@@ -57,7 +57,7 @@
                         
                         <input type="text" name="_gotcha" style="display:none">
                         
-                        <div id="terminal-logs" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 15px; min-height: 60px; font-family: var(--font-mono);"></div>
+                        <div id="terminal-logs" style="font-size: 0.75rem; margin-top: 15px; min-height: 100px; font-family: var(--font-mono); line-height: 1.4;"></div>
 
                         <div style="margin-top: 20px;">
                             <button type="submit" class="btn-send" id="submit-btn">[ TRANSMIT_DATA ]</button>
@@ -105,12 +105,12 @@
             const btn = document.getElementById('submit-btn');
             const originalText = btn.innerText;
             
-            // UI LOCKDOWN
+            // 1. LOCK UI
             btn.disabled = true;
             btn.innerText = "[ PROCESSING... ]";
-            logContainer.innerHTML = ""; // Reset logs
+            logContainer.innerHTML = ""; 
 
-            // FAKE SECURITY LOGS
+            // 2. RUN SEQUENCE
             const logs = [
                 "> INITIALIZING_SECURE_UPLINK...",
                 "> SCRUBBING_SENDER_METADATA...",
@@ -123,9 +123,7 @@
             const logInterval = setInterval(() => {
                 if (i < logs.length) {
                     const line = document.createElement('div');
-                    line.style.marginBottom = "2px";
                     line.innerText = logs[i];
-                    // Make the logs green using your accent color
                     line.style.color = "var(--accent)"; 
                     logContainer.appendChild(line);
                     i++;
@@ -148,20 +146,23 @@
                     }
                 }).then(response => {
                     if (response.ok) {
+                        // SUCCESS
                         modal.style.display = 'flex'; 
                         modal.querySelector('.modal-content').classList.add('modal-glitch-effect');
                         contactForm.reset(); 
-                        logContainer.innerHTML = ""; // Clear logs on success
+                        logContainer.innerHTML = "<div style='color:var(--accent)'>[ TRANSMISSION_SUCCESSFUL ]</div>";
                     } else {
+                        // API ERROR
                         response.json().then(errorData => {
-                            console.error('Formspree Error:', errorData);
-                            alert('TRANSMISSION_FAILED: ' + (errorData.error || 'Check Verification Status.'));
+                            logContainer.innerHTML = "<div style='color:var(--accent-glitch)'>[ TRANSMISSION_REJECTED ]</div>";
+                            alert('SYSTEM_ERROR: ' + (errorData.error || 'Check Verification Status.'));
                         });
                     }
                     btn.innerText = originalText;
                     btn.disabled = false;
                 }).catch(error => {
-                    console.error('Network Error:', error);
+                    // NETWORK ERROR
+                    logContainer.innerHTML = "<div style='color:var(--accent-glitch)'>[ UPLINK_LOST ]</div>";
                     alert('NETWORK_ERROR: Connection to terminal hub lost.');
                     btn.innerText = originalText;
                     btn.disabled = false;
@@ -173,6 +174,8 @@
     function closeModal() {
         modal.style.display = 'none';
         modal.querySelector('.modal-content').classList.remove('modal-glitch-effect');
+        // Clear logs after closing so it's clean for next time
+        logContainer.innerHTML = "";
     }
 
     window.onclick = function(event) {
