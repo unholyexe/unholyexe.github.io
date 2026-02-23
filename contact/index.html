@@ -35,7 +35,7 @@
                         <span class="text-muted">Initiating contact protocol...</span>
                     </div>
                     
-                    <form id="contact-form" action="https://formspree.io/f/mjgepkeo" method="POST">
+                    <form id="contact-form">
                         <div class="msg-line">
                             <span class="msg-prompt">IDENTITY:</span>
                             <input type="text" name="name" class="msg-input" placeholder="Name/Alias" required>
@@ -94,34 +94,52 @@
     const contactForm = document.getElementById('contact-form');
     const modal = document.getElementById('thanksModal');
 
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevents Formspree from opening a new window
-        
-        const btn = this.querySelector('.btn-send');
-        btn.innerText = "[ SENDING... ]";
-        
-        const formData = new FormData(this);
-        
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            if (response.ok) {
-                modal.style.display = 'flex'; // Opens your popup
-                contactForm.reset(); // Clears the form
-            } else {
-                alert('Transmission failed. Ensure your Formspree ID is active.');
-            }
-            btn.innerText = "[ TRANSMIT_DATA ]";
-        }).catch(error => {
-            alert('Network Error. Connection timed out.');
-            btn.innerText = "[ TRANSMIT_DATA ]";
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            // STOP ALL DEFAULT BROWSER ACTIONS
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const btn = this.querySelector('.btn-send');
+            const originalText = btn.innerText;
+            btn.innerText = "[ SENDING... ]";
+            btn.disabled = true; // Prevent double-clicks
+            
+            const formData = new FormData(this);
+            
+            // TRANSMIT DATA VIA AJAX
+            fetch('https://formspree.io/f/mjgepkeo', {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    modal.style.display = 'flex'; // Show our custom modal
+                    contactForm.reset(); // Clear form fields
+                } else {
+                    alert('Transmission failed. Ensure your Formspree ID is verified.');
+                }
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Network Error. Connection timed out.');
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
         });
-    });
+    }
 
+    // Function to hide modal
     function closeModal() {
         modal.style.display = 'none';
+    }
+
+    // Close modal if user clicks outside the box
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
     }
 </script>
 
