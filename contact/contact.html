@@ -1,32 +1,69 @@
-<section class="terminal-contact">
-    <div class="terminal-header">
-        <span class="terminal-title">Secure_Channel // P2P_ENCRYPTED</span>
-        <div class="terminal-dots">● ● ●</div>
-    </div>
-    
-    <div class="terminal-body">
-        <div class="msg-line">
-            <span class="msg-prompt">remote@unholy:~$</span>
-            <span class="text-muted">Initiating contact protocol...</span>
-        </div>
-        
-        <form action="#">
-            <div class="msg-line">
-                <span class="msg-prompt">IDENTITY:</span>
-                <input type="text" class="msg-input" placeholder="Name/Alias" required>
-            </div>
-            <div class="msg-line">
-                <span class="msg-prompt">SUBJECT:</span>
-                <input type="text" class="msg-input" placeholder="Architecture / Security / Networking">
-            </div>
-            <div class="msg-line">
-                <span class="msg-prompt">MESSAGE:</span>
-                <input type="text" class="msg-input" placeholder="Type transmission..." required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact | Unholy ⥀</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Unholy ⥀</h1>
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="../docs/index.html">Documentation</a>
+        <a href="../blog/index.html">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<div class="container">
+    <aside class="sidebar">
+        <a href="../index.html">Dashboard</a>
+        <a href="../docs/index.html">System Docs</a>
+        <a href="contact.html" style="color: var(--accent); border-left: 3px solid var(--accent);">Active Channel</a>
+    </aside>
+
+    <main class="content">
+        <section class="terminal-contact">
+            <div class="terminal-header">
+                <span class="terminal-title">Secure_Channel // P2P_ENCRYPTED</span>
+                <div class="terminal-dots">● ● ●</div>
             </div>
             
-            <div style="margin-top: 20px;">
-                <button type="submit" class="btn-send">[ TRANSMIT_DATA ]</button>
+            <div class="terminal-body">
+                <div class="msg-line">
+                    <span class="msg-prompt">remote@unholy:~$</span>
+                    <span class="text-muted">Initiating contact protocol...</span>
+                </div>
+                
+                <form action="#">
+                    <div class="msg-line">
+                        <span class="msg-prompt">IDENTITY:</span>
+                        <input type="text" class="msg-input" placeholder="Name/Alias" required>
+                    </div>
+                    <div class="msg-line">
+                        <span class="msg-prompt">SUBJECT:</span>
+                        <input type="text" class="msg-input" placeholder="Architecture / Security / Networking">
+                    </div>
+                    <div class="msg-line">
+                        <span class="msg-prompt">MESSAGE:</span>
+                        <input type="text" class="msg-input" placeholder="Type transmission..." required>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button type="submit" class="btn-send">[ TRANSMIT_DATA ]</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</section>
+        </section>
+    </main>
+</div>
+
+<footer>
+    <p>© 2026 Unholy ⥀</p>
+</footer>
+
+</body>
+</html>
